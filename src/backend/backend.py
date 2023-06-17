@@ -1,7 +1,6 @@
 #backend for the website.
 
 from flask import Flask
-import mindsdb_sdk
 from queries import make_query
 
 app = Flask(__name__)
