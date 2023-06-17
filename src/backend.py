@@ -1,4 +1,7 @@
+#backend for the website.
+
 from flask import Flask
+import mindsdb_sdk
 
 app = Flask(__name__)
 
