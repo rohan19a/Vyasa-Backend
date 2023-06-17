@@ -8,21 +8,23 @@ app = Flask(__name__)
 
 @app.route('/update', methods=['POST'])
 def update():
-    # Do something here
+    make_query('INSERT INTO EmailAddresses (email_id, user_id, email_address) VALUES (1, "test", "test")')
+    make_query('ISERT INTO EmailAttributes (attribute_id, email_id, name, role, description, authority, department), VALUES (1, 1, "test", "test", "test", "test", "test")')
     return 'OK'
 
 @app.route('/get', methods=['GET'])
 def get():
-    # Do something here
+    make_query('SELECT * FROM EmailAddresses where userid = "test"')
     return 'OK'
 
 @app.route('/delete', methods=['DELETE'])
 def delete():
-    # Do something here
+    make_query('DELETE FROM EmailAddresses WHERE email_id = "test"')
     return 'OK'
 
 @app.route('/create', methods=['PUT'])
 def create():
+    make_query('INSERT INTO EmailAddresses (email_id, user_id, email_address) VALUES (1, "test", "test")')
     make_query('')
 
 @app.route('/signup', methods=['POST'])
