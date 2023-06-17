@@ -1,16 +1,9 @@
-# vyasa
-
-Gmail portal with integrated vector search
-
-Features:
-Weekly summaries
-Search based on text input
-add stuff to calander 
-
-workplace/organization distributor
-automatically forward emails to a certain person based on message in email
-
-
-Use mindsDB
-
 # Vyasa-Backend
+
+--MindsDB powered email distribution engine--
+Corperate tool powered by LLMS that forwards emails sent to a single organizational email endpoint (i.e. info@company.com) to individual members of the organization based on the question in the email. 
+
+
+
+
+
