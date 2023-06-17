@@ -2,6 +2,7 @@
 
 from flask import Flask
 from queries import make_query
+from functions import decide, initialize_email
 
 app = Flask(__name__)
 
@@ -30,6 +31,10 @@ def create():
 def signup():
     if len(make_query('SELECT * FROM Users WHERE username = "test"')) > 0:
         return 'Username already exists'
+    
+    #create the new database for the user, from functions.py
+    initialize_email()
+
     make_query('INSERT INTO Users (user_id, username, password) VALUES (1, "test", "test")')
     return 'OK'
 

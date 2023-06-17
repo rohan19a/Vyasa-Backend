@@ -1,17 +1,18 @@
 CREATE DATABASE mindsdb_gmail
 WITH ENGINE = 'gmail',
 parameters = {
-    "credentials_file": "./credentials.json",
+    "credentials_file": "/credentials.json",
     "scopes": [
     'https://www.googleapis.com/auth/gmail.readonly',
-    'https://www.googleapis.com/auth/gmail.modify',
     'https://www.googleapis.com/auth/gmail.compose',
     'https://www.googleapis.com/auth/gmail.send',
     'https://www.googleapis.com/auth/gmail.insert',
     'https://www.googleapis.com/auth/gmail.labels'
 ]
 };
+https://mail.google.com/
 
+'''https://developers.google.com/gmail/api/auth/scopes'''
 
 
 INSERT INTO mindsdb_gmail.emails (thread_id, message_id, to_email, subject, body)

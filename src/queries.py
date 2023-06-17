@@ -9,5 +9,3 @@ def make_query(query):
         raise Exception('Query failed')
     return resp.json()
 
-print(make_query('SELECT * FROM users'))
-
