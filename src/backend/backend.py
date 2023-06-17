@@ -27,6 +27,8 @@ def create():
 
 @app.route('/signup', methods=['POST'])
 def signup():
+    if len(make_query('SELECT * FROM Users WHERE username = "test"')) > 0:
+        return 'Username already exists'
     make_query('INSERT INTO Users (user_id, username, password) VALUES (1, "test", "test")')
     return 'OK'
 
