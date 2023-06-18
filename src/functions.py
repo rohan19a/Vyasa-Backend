@@ -31,6 +31,5 @@ def initialize_email():
     server.query(quer)
 
 def update_minds(table):
-    query = ''''''
-    make_query(query)
+    server.get_database('users').get_table(table).update()
     return jsonify({'success': True})
