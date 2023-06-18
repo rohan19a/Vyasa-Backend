@@ -70,13 +70,13 @@ def insert_into_users(user_id, user_name, user_password):
 
 def insert_into_EmailAddresses(email_id, user_id, email_address):
       with conn.cursor() as cur:
-          cur.execute("INSERT INTO EmailAddresses (email_id, user_id, email_address) VALUES (%s, %s, %s)", (email_id, user_id, email_address))
+          cur.execute("INSERT INTO EmailAddresses (corporate_email, user_id, email_address) VALUES (%s, %s, %s)", (email_id, user_id, email_address))
           conn.commit()
           cur.close()
 
 def insert_into_emailAttributes(attribute_id, email_id, name, role, description, authority, department):
   with conn.cursor() as cur:
-      cur.execute("INSERT INTO EmailAttributes (attribute_id, email_id, name, role, description, authority, department) VALUES (%s, %s, %s, %s, %s, %s, %s)", (attribute_id, email_id, name, role, description, authority, department))
+      cur.execute("INSERT INTO EmailAttributes (attribute_id, corporate_email, name, role, description, authority, department) VALUES (%s, %s, %s, %s, %s, %s, %s)", (attribute_id, email_id, name, role, description, authority, department))
       conn.commit()
       cur.close()
 
@@ -87,22 +87,51 @@ def insert_into_EmailMessages(message_id, user_id, message_content, timestamp, o
       cur.close()
 
 
+qqq = '''
+
+CREATE TABLE EmailAddresses (
+  corporate_email VARCHAR(255),
+  email_address VARCHAR(255),
+  PRIMARY KEY (corporate_email),
+  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE EmailAttributes (
+  corporate_email VARCHAR(255),
+  name VARCHAR(255),
+  role VARCHAR(255),
+  description VARCHAR(255),
+  authority VARCHAR(255),
+  department VARCHAR(255),
+  FOREIGN KEY (corporate_email) REFERENCES EmailAddresses(corporate_email)
+);
+'''
+'''
+e = 'info@general_cooperation.com'
+insert_into_EmailAddresses(e, 10, "mike@general_cooperation.com")
+insert_into_emailAttributes(1, e, "Mike", "CEO", "CEO of General Cooperation", "C-Suite", "Management")
+insert_into_emailAttributes(2, e, "Rohan", "CTO", "CTO of General Cooperation", "C-Suite", "Technology")
+insert_into_emailAttributes(3, e, "James", "CFO", "CFO of General Cooperation", "C-Suite", "Managment")
+insert_into_emailAttributes(4, e, "Jane", "Deverloper", "Website developer", "Medium Authority", "Technology")
+insert_into_emailAttributes(5, e, "Joe", "Deverloper", "Website developer", "Intern", "Technology")
+
+'''
 '''
 insert_into_users(10, "info@general_cooperation.com", "test")
 insert_into_EmailAddresses(3, 10, "mike@general_cooperation.com")
-insert_into_emailAttributes(1, 3, "Mike", "CEO", "CEO of General Cooperation", "C-Suite", "Management")
+insert_into_emailAttributes(1, info@general_cooperation.com, "Mike", "CEO", "CEO of General Cooperation", "C-Suite", "Management")
 
 insert_into_EmailAddresses(4, 10, "rohan@general_cooperation.com")
-insert_into_emailAttributes(2, 4, "Rohan", "CTO", "CTO of General Cooperation", "C-Suite", "Technology")
+insert_into_emailAttributes(2, info@general_cooperation.com, "Rohan", "CTO", "CTO of General Cooperation", "C-Suite", "Technology")
 
 insert_into_EmailAddresses(5, 10, "james@general_cooperation.com")
-insert_into_emailAttributes(3, 5, "James", "CFO", "CFO of General Cooperation", "C-Suite", "Managment")
+insert_into_emailAttributes(3, info@general_cooperation.com, "James", "CFO", "CFO of General Cooperation", "C-Suite", "Managment")
 
 insert_into_EmailAddresses(6, 10, "jane@general_cooperation.com")
-insert_into_emailAttributes(4, 6, "Jane", "Deverloper", "Website developer", "Medium Authority", "Technology")
+insert_into_emailAttributes(4, info@general_cooperation.com, "Jane", "Deverloper", "Website developer", "Medium Authority", "Technology")
 
 insert_into_EmailAddresses(7, 10, "joe@general_cooperation.com")
-insert_into_emailAttributes(5, 7, "Joe", "Deverloper", "Website developer", "Intern", "Technology")
+insert_into_emailAttributes(5, info@general_cooperation.com, "Joe", "Deverloper", "Website developer", "Intern", "Technology")
 '''
 
 
@@ -127,3 +156,4 @@ for x in querier:
     inaa += 1
     insert_into_EmailMessages(inaa, 10, x[2], "2021-01-01 00:00:00", "test")
     '''
+

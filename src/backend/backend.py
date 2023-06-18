@@ -3,8 +3,11 @@ from flask import jsonify, request, Flask, request
 import json
 from dotenv import load_dotenv
 import os
+import openai
+
+
 load_dotenv()
-import requests
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 app = Flask(__name__)
@@ -131,26 +134,33 @@ def login():
 @app.route('/demo', methods=['POST'])
 def demo():
     data = request.json
-    messages = data['messages']
     print(data)
 
+    mess = data['messages']
+    for message in mess:
+        content = message['content']
+        message_id = message.get('id')
 
-    # Construct the payload
-    payload = {
-        'messages': messages
-    }
+    prompt = "The first part of the following prompt is an email from a customer or interested party to a coorperations email. The second part is a list of members of this coorperation with a list of their emails and a description of their jobs. Select the best person to send the email to: This is the user email: "
+    print(query_postgres('SELECT * FROM EmailAttributes where EmailAttributes.corporate_email =' + message_id))
+    message = prompt + content + '. And this is the list of cooperate worker entities: '
+    print(message)
 
     # Make a POST request to the ChatGPT API
-    response = requests.post('https://api.openai.com/v1/chat/completions', json=payload, headers={
-        'Authorization': '',
-        'Content-Type': 'application/json'
-    })
-    print(response.json())
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{'role': 'user', 'content': 'hello'}],
+        )
+    
+    print(completion.choices[0].message)
+    
+
+
+
 
     # Parse the response
-    if response.status_code == 200:
-        result = response.json()
-        return jsonify(result)
+    if completion is not None:
+        return jsonify(completion.choices[0].message), 200
     else:
         return jsonify({'error': 'Something went wrong.'}), 500    
 

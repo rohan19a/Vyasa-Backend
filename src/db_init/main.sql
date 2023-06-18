@@ -1,36 +1,33 @@
 -- Create the Users table
 CREATE TABLE Users (
-  user_id INT PRIMARY KEY,
-  username VARCHAR(255),
+  corporate_email VARCHAR(255),
   password VARCHAR(255)
 );
 
 -- Create the EmailMessages table
 CREATE TABLE EmailMessages (
-  message_id INT PRIMARY KEY,
-  user_id INT,
+  sender_email INT PRIMARY KEY,
+  corporate_email VARCHAR(255),
   message_content VARCHAR(255),
   timestamp TIMESTAMP,
   other_message_attributes VARCHAR(255),
-  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+  FOREIGN KEY (corporate_email) REFERENCES Users(corporate_email)
 );
 
 -- Create the EmailAddresses table
 CREATE TABLE EmailAddresses (
-  email_id INT PRIMARY KEY,
-  user_id INT,
+  corporate_email VARCHAR(255),
   email_address VARCHAR(255),
-  FOREIGN KEY (user_id) REFERENCES Users(user_id)
+  PRIMARY KEY (corporate_email),
+  FOREIGN KEY (corporate_email) REFERENCES Users(corporate_email)
 );
 
--- Create the EmailAttributes table
 CREATE TABLE EmailAttributes (
-  attribute_id INT PRIMARY KEY,
-  email_id INT,
+  corporate_email VARCHAR(255),
   name VARCHAR(255),
   role VARCHAR(255),
   description VARCHAR(255),
   authority VARCHAR(255),
   department VARCHAR(255),
-  FOREIGN KEY (email_id) REFERENCES EmailAddresses(email_id)
+  FOREIGN KEY (corporate_email) REFERENCES EmailAddresses(corporate_email)
 );
