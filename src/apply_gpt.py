@@ -1,19 +1,20 @@
 import mindsdb_sdk
+from queries import make_query
 
 server = mindsdb_sdk.connect()
 
 emails = server.get_database('mindsdb_gmail')
-user_data = server.get_database('users')
+user_data = server.get_database('user_data')
 
 #get the elements of all tables of user where user_id = 1
-user = user_data.get_table('users').select(['*'], where={'user_id': 1})
-messages = user_data.get_table('emailmessages').select(['*'], where={'user_id': 1})
-email = user_data.get_table('emailaddresses').select(['*'], where={'user_id': 1})
-e_attributes = user_data.get_table('emailattributes').select(['*'], where={'email_id': email[0]['email_id']})
+user = user_data.query('select * from users where user_id = 1')
+messages = user_data.query('select * from emailmessages where user_id = 1')
+email = user_data.query('select * from emailaddresses where user_id = 1')
+e_attributes = user_data.query('select * from emailattributes where user_id = 1')
 
 #run ChatGPT on the new messages and determine which e_atrributes are most relevent
 query = '''
-CREATE MODEL project_a.openai_test_a
+CREATE MODEL prod.openai_test_a
 PREDICT answer
 USING
     engine = 'openai',
@@ -23,5 +24,4 @@ USING
 
 '''
 
-ans = server.query(query)
-print(ans)
+make_query(query)   
