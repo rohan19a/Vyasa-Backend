@@ -1,7 +1,10 @@
 from queries import query_postgres, insert_into_users
-from flask import jsonify, request, Flask
+from flask import jsonify, request, Flask, request
 import json
-
+from dotenv import load_dotenv
+import os
+load_dotenv()
+import requests
 
 
 app = Flask(__name__)
@@ -24,11 +27,29 @@ def handle_login_options():
     }
     return ('', 204, response_headers)
 
+@app.route('/demo', methods=['OPTIONS'])
+def handle_demo_options():
+    response_headers = {
+        'Access-Control-Allow-Origin': '*',  # Replace '*' with the actual allowed origin(s)
+        'Access-Control-Allow-Methods': 'POST',
+        'Access-Control-Allow-Headers': 'Content-Type'
+    }
+    return ('', 204, response_headers)
+
 @app.route('/update', methods=['POST'])
 def update():
-    query_postgres('INSERT INTO EmailAddresses (email_id, user_id, email_address) VALUES (1, "test", "test")')
-    query_postgres('ISERT INTO EmailAttributes (attribute_id, email_id, name, role, description, authority, department), VALUES (1, 1, "test", "test", "test", "test", "test")')
-    return 'OK'
+    if request.method == 'POST':
+        data = request.get_json(force=True)
+        print(data)
+        if 'username' in data and 'password' in data:
+            username = data['username']
+            password = data['password']
+            query_postgres(f"UPDATE users SET password = '{password}' WHERE username = '{username}'")
+            return jsonify({'message': 'Password updated successfully'}), 200
+        else:
+            return jsonify({'message': 'Username and password are required'}), 400
+    else:
+        return jsonify({'message': 'Method not allowed'}), 405
 
 @app.route('/get', methods=['GET'])
 def get():
@@ -46,12 +67,20 @@ def get():
 
 @app.route('/delete', methods=['DELETE'])
 def delete():
-    query_postgres('DELETE FROM EmailAddresses WHERE email_id = "test"')
+    data = request.get_json(force=True)
+    email_address = data['email_address']
+
+    query_postgres('DELETE FROM EmailAddresses WHERE email_id = ' + email_address)
     return 'OK'
 
 @app.route('/create', methods=['PUT'])
 def create():
-    query_postgres('INSERT INTO EmailAddresses (email_id, user_id, email_address) VALUES (1, "test", "test")')
+    data = request.get_json(force=True)
+    user_id = data['user_id']
+    email_id = data['email_id']
+    email_address = data['email_address']
+    query_postgres(f"INSERT INTO EmailAddresses (user_id, email_id, email_address) VALUES ('{user_id}', '{email_id}', '{email_address}')")
+    return json.dumps({'success': True})
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -99,6 +128,31 @@ def login():
         print('Login failed')
         return jsonify({'success': False})
 
+@app.route('/demo', methods=['POST'])
+def demo():
+    data = request.json
+    messages = data['messages']
+    print(data)
+
+
+    # Construct the payload
+    payload = {
+        'messages': messages
+    }
+
+    # Make a POST request to the ChatGPT API
+    response = requests.post('https://api.openai.com/v1/chat/completions', json=payload, headers={
+        'Authorization': '',
+        'Content-Type': 'application/json'
+    })
+    print(response.json())
+
+    # Parse the response
+    if response.status_code == 200:
+        result = response.json()
+        return jsonify(result)
+    else:
+        return jsonify({'error': 'Something went wrong.'}), 500    
 
 if __name__ == '__main__':
     app.run()

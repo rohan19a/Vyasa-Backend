@@ -30,7 +30,7 @@ CREATE TABLE EmailAddresses (
 
 create_email_attributes_table = """
 CREATE TABLE EmailAttributes (
-  attribute_id INT PRIMARY KEY,
+  email_address VARCHART(255) PRIMARY KEY,
   email_id INT,
   name VARCHAR(255),
   role VARCHAR(255),
@@ -40,4 +40,6 @@ CREATE TABLE EmailAttributes (
   FOREIGN KEY (email_id) REFERENCES EmailAddresses(email_id)
 );
 """
+
+
 
