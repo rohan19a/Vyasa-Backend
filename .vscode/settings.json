@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/f251960b-7a7d-4168-ade3-7ac8771f6baf/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/Vyasa",
+    "appService.deploySubpath": "src/backend"
+}

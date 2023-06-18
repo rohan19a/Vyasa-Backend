@@ -29,28 +29,33 @@ elif config == 'remote':
         )
 
 
+
 def query_postgres(query):
-        # Connect to the PostgreSQL server
-        print("Connecting to the PostgreSQL database...")
+    try:
+    # Connect to the PostgreSQL server
         conn = psycopg2.connect(
-            host="localhost",
-            port="5432",
-            database="postgres",
-            user="postgres",
-            password="postgres"
+        host="localhost",
+        port="5432",
+        database="postgres",
+        user="postgres",
+        password="postgres"
         )
 
         # Create a cursor object to execute SQL statements
         cur = conn.cursor()
 
-        # Execute the SQL statements to create tables
+    # Execute the SQL statements to create tables
         cur.execute(query)
 
-        print("PostgreSQL database version:")
-
-        # Commit the changes to the database
+    # Commit the changes to the database
         conn.commit()
 
+
+    except psycopg2.Error as e:
+        print("Error creating tables:", e)
+
+    finally:
+    # Close the cursor and database connection
         if cur:
             cur.close()
         if conn:
@@ -74,4 +79,3 @@ def insert_into_emailAttributes(attribute_id, email_id, name, role, description,
       cur.execute("INSERT INTO EmailAttributes (attribute_id, email_id, name, role, description, authority, department) VALUES (%s, %s, %s, %s, %s, %s, %s)", (attribute_id, email_id, name, role, description, authority, department))
       conn.commit()
       cur.close()
-
