@@ -1,4 +1,6 @@
 import mindsdb_sdk
+from queries import make_query
+from flask import jsonify
 
 # connects to the default port (47334) on localhost 
 server = mindsdb_sdk.connect()
@@ -28,3 +30,7 @@ def initialize_email():
 
     server.query(quer)
 
+def update_minds(table):
+    query = ''''''
+    make_query(query)
+    return jsonify({'success': True})

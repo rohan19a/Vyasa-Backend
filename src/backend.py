@@ -1,9 +1,9 @@
 #backend for the website.
 
 from flask import Flask
-from queries import make_query, query_postgres
-from functions import decide, initialize_email 
+from queries import query_postgres
 from flask import jsonify
+from flask import request
 
 app = Flask(__name__)
 
@@ -29,22 +29,35 @@ def create():
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    if len(query_postgres('SELECT * FROM Users WHERE username = "test"')) > 0:
+    login = request.json.get('login')
+    password = request.json.get('password')
+    if len(query_postgres('SELECT * FROM Users WHERE username =' + login)) > 0:
         return 'Username already exists'
     
     #create the new database for the user, from functions.py
     #initialize_email()
 
-    query_postgres('INSERT INTO Users (user_id, username, password) VALUES (1, "test", "test")')
+    query_postgres('INSERT INTO Users (user_id, username, password) VALUES (1,' + login + ',' + password +' )')
     return 'OK'
 
 @app.route('/login', methods=['POST'])
 def login():
-    l = query_postgres('SELECT * FROM Users WHERE username = "test" AND password = "test"')
-    if len(l) == 0:
-        return 'Invalid username or password'
-    return jsonify({'success': True, 'ok': True})
+    # Get the login and password from the request body
+    login = request.json.get('login')
+    password = request.json.get('password')
 
+    print(login)
+
+    # Perform the database query
+    # Replace this with your actual database query logic
+
+    password_true = query_postgres('SELECT password FROM Users WHERE username = "test"')
+    if login == "test" and password == password_true:
+        print('Login success')
+        return jsonify({'success': True})
+    else:
+        print('Login failed')
+        return jsonify({'success': False})
 
 
 if __name__ == '__main__':
