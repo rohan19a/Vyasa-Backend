@@ -5,14 +5,11 @@ import os
 import sys
 import json
 import requests
-import datetime
-import time
+from gmail import watch_new_emails
 import psycopg2
 import openai #import openai
 
-
-from gmail import watch_new_emails
-
+openai.api_key = os.environ['OPENAI_API_KEY']
 
 
 
@@ -24,7 +21,7 @@ psycopg2.connect(
 )
 
 def get_recent_emails(user_id):
-    msg = watch_new_emails
+    user_id = watch_new_emails()
     
 
     return []
@@ -32,5 +29,15 @@ def get_recent_emails(user_id):
 def chatgpt(msg):
     #call the open ai api on the message
     #return the response
+
+    response = openai.Completion.create(
+        engine="davinci",
+        prompt=msg,
+        temperature=0.9,
+        max_tokens=150,
+    )
+
+    return response
+
 
 
