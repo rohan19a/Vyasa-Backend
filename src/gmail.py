@@ -85,6 +85,7 @@ def watch_new_emails():
                 print(f'New email:\n{msg_data}')
                 # Mark the email as read if desired
                 # service.users().messages().modify(userId='me', id=message['id'], body={'removeLabelIds': ['UNREAD']}).execute()
+                return msg_data
 
 if __name__ == '__main__':
     watch_new_emails()
